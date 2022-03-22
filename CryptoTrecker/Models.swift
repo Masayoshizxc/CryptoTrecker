@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 struct Crypto: Codable{
     let asset_id: String
     let name: String?

@@ -53,6 +53,7 @@ class CryptoTableViewCell: UITableViewCell {
     override func layoutSubviews(){
         super.layoutSubviews()
         
+        
         nameLabel.sizeToFit()
         symbolLabel.sizeToFit()
         priceLabel.sizeToFit()

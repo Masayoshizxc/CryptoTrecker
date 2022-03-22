@@ -17,6 +17,7 @@ final class APICaller{
     private init(){}
 //    public var icons: [Icon] = []
 //    private var whenReadyBlock: ((Result<[Crypto], Error>) -> Void)?
+     
     
     public func getAllCryptoData(
         completion: @escaping (Result<[Crypto], Error>) -> Void
