@@ -39,18 +39,22 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
         APICaller.shared.getAllCryptoData { [weak self] result in
             switch result {
             case .success(let models):
-                self?.viewModels = models.compactMap({
+                self?.viewModels = models.compactMap({ model in
                     
                     //NumberFormatter
-                    let price = $0.price_usd ?? 0
-                    let formatter = ViewController.numberFormatter
-                    let priceString = formatter.string(from: NSNumber(value: price))
+//                    let price = $0.price ?? "N/A"
+//                    let formatter = ViewController.numberFormatter
                     
+                    let iconUrl = URL(string: APICaller.shared.icons.filter({icon in
+                        icon.currency == icon.currency
+                    }).first?.logo_url ?? ""
+                    )
                     
                     return CryptoTableViewCellViewModel(
-                        name: $0.name ?? "N/A",
-                        symbol: $0.asset_id,
-                        price: priceString ?? "N/A"
+                        name: model.name ?? "N/A",
+                        symbol: model.currency,
+                        price: model.price ?? "N/A",
+                        iconUrl: iconUrl
                     )
                 })
                 

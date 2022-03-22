@@ -10,6 +10,7 @@ struct CryptoTableViewCellViewModel {
     let name: String
     let symbol: String
     let price: String
+    let iconUrl: URL?
 }
 
 class CryptoTableViewCell: UITableViewCell {
@@ -35,6 +36,13 @@ class CryptoTableViewCell: UITableViewCell {
         return label
     }()
     
+    private let iconImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.backgroundColor = .red
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
     //Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){
@@ -42,6 +50,7 @@ class CryptoTableViewCell: UITableViewCell {
         contentView.addSubview(nameLabel)
         contentView.addSubview(symbolLabel)
         contentView.addSubview(priceLabel)
+        contentView.addSubview(iconImageView)
     }
     
     required init?(coder: NSCoder) {
@@ -52,6 +61,14 @@ class CryptoTableViewCell: UITableViewCell {
     
     override func layoutSubviews(){
         super.layoutSubviews()
+        let size: CGFloat = contentView.frame.size.height/1.1
+        iconImageView.frame == CGRect(
+            x: 20,
+            y: (contentView.frame.size.height-size)/2,
+            width: size,
+        height: size
+        )
+            
         
         
         nameLabel.sizeToFit()
@@ -59,13 +76,13 @@ class CryptoTableViewCell: UITableViewCell {
         priceLabel.sizeToFit()
         
         nameLabel.frame = CGRect(
-            x: 15,
+            x: 30 + size,
             y: 0,
             width: contentView.frame.size.width/2,
             height: contentView.frame.size.height/2
         )
         symbolLabel.frame = CGRect(
-            x: 25,
+            x: 30 + size,
             y: contentView.frame.size.height/2,
             width: contentView.frame.size.width/2,
             height: contentView.frame.size.height/2
@@ -79,12 +96,30 @@ class CryptoTableViewCell: UITableViewCell {
         
     }
     
+    override func prepareForReuse(){
+        super.prepareForReuse()
+        iconImageView.image = nil
+        nameLabel.text = nil
+        priceLabel.text = nil
+        symbolLabel.text = nil
+    }
+    
     //Configure
     
     func configure(with viewModel: CryptoTableViewCellViewModel){
         nameLabel.text = viewModel.name
         symbolLabel.text = viewModel.symbol
         priceLabel.text = viewModel.price
+        if let url = viewModel.iconUrl{
+            let task = URLSession.shared.dataTask(with: url) {[weak self] data, _, _ in
+                if let data = data {
+                    DispatchQueue.main.async {
+                        self?.iconImageView.image = UIImage(data: data)
+                    }
+                }
+            }
+            task.resume()
+        }
     }
     
 }

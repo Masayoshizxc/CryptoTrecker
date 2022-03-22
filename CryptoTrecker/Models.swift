@@ -9,13 +9,13 @@ import Foundation
 
 
 struct Crypto: Codable{
-    let asset_id: String
+    let currency: String
     let name: String?
-    let price_usd: Float?
-    let id_icon: String?
+    let price: String?
+    let logo_url: String?
 }
 
 struct Icon: Codable{
-    let asset_id: String
-    let url: String
+    let logo_url: String
+    let currency: String
 }
